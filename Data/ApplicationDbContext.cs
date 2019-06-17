@@ -25,5 +25,6 @@ namespace Handled.Data
         public DbSet<Incident> Incident { get; set; }
         public DbSet<CarDriverViewModel> CarDriverViewModel { get; set; }
         public DbSet<IncidentCarBicycleViewModel> IncidentCarBicycleViewModel { get; set; }
+        public DbSet<BicyclePhotoUploadViewModel> BicyclePhotoUploadViewModels { get; set; }
     }
 }
