@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190617151935_initial")]
+    [Migration("20190617162840_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,14 +79,18 @@ namespace Handled.Migrations
 
                     b.Property<int>("DriverId");
 
+                    b.Property<string>("ImagePath");
+
+                    b.Property<string>("LicensePlate")
+                        .IsRequired();
+
                     b.Property<string>("Make");
 
                     b.Property<string>("ManufactureYear");
 
                     b.Property<string>("Model");
 
-                    b.Property<string>("VIN")
-                        .IsRequired();
+                    b.Property<string>("VIN");
 
                     b.HasKey("CarId");
 
@@ -225,6 +229,8 @@ namespace Handled.Migrations
                     b.Property<int>("BicycleRiderId");
 
                     b.Property<int>("CarDriverId");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<DateTime>("IncidentDate");
 

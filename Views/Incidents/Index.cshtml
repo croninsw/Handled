@@ -12,11 +12,20 @@
 <table class="table">
     <thead>
         <tr>
+            @*<th>
+            @Html.DisplayNameFor(model => model.BicycleRider)
+        </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.BicycleRider)
+                @Html.DisplayNameFor(model => model.CarDriver.Driver.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CarDriver)
+                @Html.DisplayNameFor(model => model.CarDriver.Driver.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BicycleRider.Bicycle.Make)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BicycleRider.Bicycle.Model)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IncidentDate)
@@ -27,11 +36,20 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.BicycleRider.BicycleRiderId)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.BicycleRider.BicycleRiderId)
+                @Html.DisplayFor(modelItem => item.CarDriver.Driver.DriverId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CarDriver.CarDriverId)
+                @Html.DisplayFor(modelItem => item.CarDriver.Driver.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleRider.Bicycle.Make)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleRider.Bicycle.Model)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IncidentDate)

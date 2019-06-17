@@ -77,14 +77,18 @@ namespace Handled.Migrations
 
                     b.Property<int>("DriverId");
 
+                    b.Property<string>("ImagePath");
+
+                    b.Property<string>("LicensePlate")
+                        .IsRequired();
+
                     b.Property<string>("Make");
 
                     b.Property<string>("ManufactureYear");
 
                     b.Property<string>("Model");
 
-                    b.Property<string>("VIN")
-                        .IsRequired();
+                    b.Property<string>("VIN");
 
                     b.HasKey("CarId");
 
@@ -223,6 +227,8 @@ namespace Handled.Migrations
                     b.Property<int>("BicycleRiderId");
 
                     b.Property<int>("CarDriverId");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<DateTime>("IncidentDate");
 
