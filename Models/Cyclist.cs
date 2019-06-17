@@ -18,6 +18,7 @@ namespace Handled.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        public string ImagePath { get; set; }
         public int Age { get; set; }
         public double Weight { get; set; }
         public string Height { get; set; }
