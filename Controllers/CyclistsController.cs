@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Handled.Data;
+using Handled.Models;
+
+namespace Handled.Controllers
+{
+    public class CyclistsController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public CyclistsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Cyclists
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Cyclist.ToListAsync());
+        }
+
+        // GET: Cyclists/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cyclist = await _context.Cyclist
+                .FirstOrDefaultAsync(m => m.CyclistId == id);
+            if (cyclist == null)
+            {
+                return NotFound();
+            }
+
+            return View(cyclist);
+        }
+
+        // GET: Cyclists/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Cyclists/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("CyclistId,FirstName,LastName,Email,Password,Age,Weight,Height")] Cyclist cyclist)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(cyclist);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(cyclist);
+        }
+
+        // GET: Cyclists/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cyclist = await _context.Cyclist.FindAsync(id);
+            if (cyclist == null)
+            {
+                return NotFound();
+            }
+            return View(cyclist);
+        }
+
+        // POST: Cyclists/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("CyclistId,FirstName,LastName,Email,Password,Age,Weight,Height")] Cyclist cyclist)
+        {
+            if (id != cyclist.CyclistId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(cyclist);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CyclistExists(cyclist.CyclistId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(cyclist);
+        }
+
+        // GET: Cyclists/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cyclist = await _context.Cyclist
+                .FirstOrDefaultAsync(m => m.CyclistId == id);
+            if (cyclist == null)
+            {
+                return NotFound();
+            }
+
+            return View(cyclist);
+        }
+
+        // POST: Cyclists/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var cyclist = await _context.Cyclist.FindAsync(id);
+            _context.Cyclist.Remove(cyclist);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CyclistExists(int id)
+        {
+            return _context.Cyclist.Any(e => e.CyclistId == id);
+        }
+    }
+}
