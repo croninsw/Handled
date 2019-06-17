@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Handled.Models.ViewModels;
+using System.IO;
 
 namespace Handled.Controllers
 {
@@ -48,8 +50,9 @@ namespace Handled.Controllers
         // GET: Bicycles/Create
         public IActionResult Create()
         {
+            BicyclePhotoUploadViewModel viewbicycle = new BicyclePhotoUploadViewModel();
             ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email");
-            return View();
+            return View(viewbicycle);
         }
 
         // POST: Bicycles/Create
@@ -57,16 +60,28 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BicycleId,VIN,Make,Model,Color,ManufactureYear,CyclistId")] Bicycle bicycle)
+        public async Task<IActionResult> Create(BicyclePhotoUploadViewModel viewbicycle)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(bicycle);
+                if (viewbicycle.ImageFile != null)
+                {
+                    var fileName = Path.GetFileName(viewbicycle.ImageFile.FileName);
+                    Path.GetTempFileName();
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewbicycle.ImageFile.CopyToAsync(stream);
+                    }
+
+                    viewbicycle.Bicycle.ImagePath = viewbicycle.ImageFile.FileName;
+                }
+                _context.Add(viewbicycle.Bicycle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycle.CyclistId);
-            return View(bicycle);
+            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            return View(viewbicycle);
         }
 
         // GET: Bicycles/Edit/5

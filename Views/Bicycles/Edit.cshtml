@@ -1,4 +1,4 @@
-﻿@model Handled.Models.Bicycle
+﻿@model Handled.Models.ViewModels.BicyclePhotoUploadViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,36 +12,41 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="BicycleId" />
+            <input type="hidden" asp-for="Bicycle.BicycleId" />
             <div class="form-group">
-                <label asp-for="VIN" class="control-label"></label>
-                <input asp-for="VIN" class="form-control" />
-                <span asp-validation-for="VIN" class="text-danger"></span>
+                <label asp-for="Bicycle.VIN" class="control-label"></label>
+                <input asp-for="Bicycle.VIN" class="form-control" />
+                <span asp-validation-for="Bicycle.VIN" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Make" class="control-label"></label>
-                <input asp-for="Make" class="form-control" />
-                <span asp-validation-for="Make" class="text-danger"></span>
+                <label asp-for="Bicycle.Make" class="control-label"></label>
+                <input asp-for="Bicycle.Make" class="form-control" />
+                <span asp-validation-for="Bicycle.Make" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
+                <label asp-for="Bicycle.Model" class="control-label"></label>
+                <input asp-for="Bicycle.Model" class="form-control" />
+                <span asp-validation-for="Bicycle.Model" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Color" class="control-label"></label>
-                <input asp-for="Color" class="form-control" />
-                <span asp-validation-for="Color" class="text-danger"></span>
+                <label asp-for="Bicycle.Color" class="control-label"></label>
+                <input asp-for="Bicycle.Color" class="form-control" />
+                <span asp-validation-for="Bicycle.Color" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManufactureYear" class="control-label"></label>
-                <input asp-for="ManufactureYear" class="form-control" />
-                <span asp-validation-for="ManufactureYear" class="text-danger"></span>
+                <label asp-for="Bicycle.ManufactureYear" class="control-label"></label>
+                <input asp-for="Bicycle.ManufactureYear" class="form-control" />
+                <span asp-validation-for="Bicycle.ManufactureYear" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CyclistId" class="control-label"></label>
-                <select asp-for="CyclistId" class="form-control" asp-items="ViewBag.CyclistId"></select>
-                <span asp-validation-for="CyclistId" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bicycle.CyclistId" class="control-label"></label>
+                <select asp-for="Bicycle.CyclistId" class="form-control" asp-items="ViewBag.CyclistId"></select>
+                <span asp-validation-for="Bicycle.CyclistId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
