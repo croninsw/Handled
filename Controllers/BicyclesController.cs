@@ -76,7 +76,7 @@ namespace Handled.Controllers
 
                     viewbicycle.Bicycle.ImagePath = viewbicycle.ImageFile.FileName;
                 }
-                _context.Add(viewbicycle);
+                _context.Add(viewbicycle.Bicycle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -4,14 +4,16 @@ using Handled.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Handled.Data.Migrations
+namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190617143251_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,6 +30,8 @@ namespace Handled.Data.Migrations
                     b.Property<string>("Color");
 
                     b.Property<int>("CyclistId");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Make");
 
@@ -71,8 +75,6 @@ namespace Handled.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CarDriverViewModelId");
-
                     b.Property<string>("Color");
 
                     b.Property<int>("DriverId");
@@ -87,8 +89,6 @@ namespace Handled.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("CarId");
-
-                    b.HasIndex("CarDriverViewModelId");
 
                     b.HasIndex("DriverId")
                         .IsUnique();
@@ -169,8 +169,6 @@ namespace Handled.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CarDriverViewModelId");
-
                     b.Property<string>("FirstName")
                         .IsRequired();
 
@@ -185,8 +183,6 @@ namespace Handled.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("DriverId");
-
-                    b.HasIndex("CarDriverViewModelId");
 
                     b.ToTable("Driver");
                 });
@@ -237,68 +233,6 @@ namespace Handled.Data.Migrations
                     b.HasIndex("CarDriverId");
 
                     b.ToTable("Incident");
-                });
-
-            modelBuilder.Entity("Handled.Models.ViewModels.CarDriverViewModel", b =>
-                {
-                    b.Property<int>("CarDriverViewModelId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CarDriverId");
-
-                    b.Property<int?>("CarId");
-
-                    b.Property<int?>("DriverId");
-
-                    b.HasKey("CarDriverViewModelId");
-
-                    b.HasIndex("CarDriverId");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("CarDriverViewModel");
-                });
-
-            modelBuilder.Entity("Handled.Models.ViewModels.IncidentCarBicycleViewModel", b =>
-                {
-                    b.Property<int>("IncidentCarBicycleViewModelId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BicycleId");
-
-                    b.Property<int>("BicycleRiderId");
-
-                    b.Property<int>("CarDriverId");
-
-                    b.Property<int?>("CarId");
-
-                    b.Property<int?>("CyclistId");
-
-                    b.Property<int?>("DriverId");
-
-                    b.Property<int?>("IncidentId");
-
-                    b.HasKey("IncidentCarBicycleViewModelId");
-
-                    b.HasIndex("BicycleId");
-
-                    b.HasIndex("BicycleRiderId");
-
-                    b.HasIndex("CarDriverId");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("CyclistId");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("IncidentId");
-
-                    b.ToTable("IncidentCarBicycleViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -489,10 +423,6 @@ namespace Handled.Data.Migrations
 
             modelBuilder.Entity("Handled.Models.Car", b =>
                 {
-                    b.HasOne("Handled.Models.ViewModels.CarDriverViewModel")
-                        .WithMany("Cars")
-                        .HasForeignKey("CarDriverViewModelId");
-
                     b.HasOne("Handled.Models.Driver", "Driver")
                         .WithOne("Car")
                         .HasForeignKey("Handled.Models.Car", "DriverId")
@@ -525,13 +455,6 @@ namespace Handled.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Handled.Models.Driver", b =>
-                {
-                    b.HasOne("Handled.Models.ViewModels.CarDriverViewModel")
-                        .WithMany("Drivers")
-                        .HasForeignKey("CarDriverViewModelId");
-                });
-
             modelBuilder.Entity("Handled.Models.Incident", b =>
                 {
                     b.HasOne("Handled.Models.BicycleRider", "BicycleRider")
@@ -543,54 +466,6 @@ namespace Handled.Data.Migrations
                         .WithMany("Incidents")
                         .HasForeignKey("CarDriverId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Handled.Models.ViewModels.CarDriverViewModel", b =>
-                {
-                    b.HasOne("Handled.Models.CarDriver", "CarDriver")
-                        .WithMany()
-                        .HasForeignKey("CarDriverId");
-
-                    b.HasOne("Handled.Models.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId");
-
-                    b.HasOne("Handled.Models.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId");
-                });
-
-            modelBuilder.Entity("Handled.Models.ViewModels.IncidentCarBicycleViewModel", b =>
-                {
-                    b.HasOne("Handled.Models.Bicycle", "Bicycle")
-                        .WithMany()
-                        .HasForeignKey("BicycleId");
-
-                    b.HasOne("Handled.Models.BicycleRider", "BicycleRider")
-                        .WithMany()
-                        .HasForeignKey("BicycleRiderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Handled.Models.CarDriver", "CarDriver")
-                        .WithMany()
-                        .HasForeignKey("CarDriverId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Handled.Models.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId");
-
-                    b.HasOne("Handled.Models.Cyclist", "Cyclist")
-                        .WithMany()
-                        .HasForeignKey("CyclistId");
-
-                    b.HasOne("Handled.Models.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId");
-
-                    b.HasOne("Handled.Models.Incident", "Incident")
-                        .WithMany()
-                        .HasForeignKey("IncidentId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
