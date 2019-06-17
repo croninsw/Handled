@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
 using Handled.Models.ViewModels;
+using System.IO;
 
 namespace Handled.Controllers
 {
@@ -49,8 +50,9 @@ namespace Handled.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
+            CarPhotoUploadViewModel viewcar = new CarPhotoUploadViewModel();
             ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName");
-            return View();
+            return View(viewcar);
         }
 
         // POST: Cars/Create
@@ -58,16 +60,28 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CarId,VIN,Make,Model,Color,ManufactureYear,DriverId")] Car car)
+        public async Task<IActionResult> Create(CarPhotoUploadViewModel viewcar)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                if (viewcar.ImageFile != null)
+                {
+                    var fileName = Path.GetFileName(viewcar.ImageFile.FileName);
+                    Path.GetTempFileName();
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewcar.ImageFile.CopyToAsync(stream);
+                    }
+
+                    viewcar.Car.ImagePath = viewcar.ImageFile.FileName;
+                }
+                _context.Add(viewcar.Car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "CarDrivers", new { area = "" });
             }
-            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName", car.DriverId);
-            return View(car);
+            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName", viewcar.Car.DriverId);
+            return View(viewcar);
         }
 
         // GET: Cars/Edit/5

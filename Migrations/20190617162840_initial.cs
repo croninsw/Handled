@@ -239,11 +239,13 @@ namespace Handled.Migrations
                 {
                     CarId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    VIN = table.Column<string>(nullable: false),
+                    LicensePlate = table.Column<string>(nullable: false),
+                    VIN = table.Column<string>(nullable: true),
                     Make = table.Column<string>(nullable: true),
                     Model = table.Column<string>(nullable: true),
                     Color = table.Column<string>(nullable: true),
                     ManufactureYear = table.Column<string>(nullable: true),
+                    ImagePath = table.Column<string>(nullable: true),
                     DriverId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -343,6 +345,7 @@ namespace Handled.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BicycleRiderId = table.Column<int>(nullable: false),
                     CarDriverId = table.Column<int>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: true),
                     IncidentDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

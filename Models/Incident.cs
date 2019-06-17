@@ -14,6 +14,7 @@ namespace Handled.Models
         public BicycleRider BicycleRider { get; set; }
         public int CarDriverId { get; set; }
         public CarDriver CarDriver { get; set; }
+        public string ImagePath { get; set; }
         public DateTime IncidentDate { get; set; }
     }
 }

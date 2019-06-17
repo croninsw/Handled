@@ -11,11 +11,13 @@ namespace Handled.Models
         [Key]
         public int CarId { get; set; }
         [Required]
+        public string LicensePlate { get; set; }
         public string VIN { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
         public string ManufactureYear { get; set; }
+        public string ImagePath { get; set; }
         public int DriverId { get; set; }
         public Driver Driver { get; set; }
         public virtual ICollection<CarDriver> CarDrivers { get; set; }
