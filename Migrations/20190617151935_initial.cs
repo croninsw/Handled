@@ -57,6 +57,7 @@ namespace Handled.Migrations
                     LastName = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: true),
                     Age = table.Column<int>(nullable: false),
                     Weight = table.Column<double>(nullable: false),
                     Height = table.Column<string>(nullable: true)

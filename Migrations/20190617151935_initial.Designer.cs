@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190617143251_initial")]
+    [Migration("20190617151935_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,8 @@ namespace Handled.Migrations
                         .IsRequired();
 
                     b.Property<string>("Height");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("LastName")
                         .IsRequired();

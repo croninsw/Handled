@@ -129,6 +129,8 @@ namespace Handled.Migrations
 
                     b.Property<string>("Height");
 
+                    b.Property<string>("ImagePath");
+
                     b.Property<string>("LastName")
                         .IsRequired();
 
