@@ -87,18 +87,24 @@ namespace Handled.Controllers
         // GET: Bicycles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            BicyclePhotoUploadViewModel viewbicycle = new BicyclePhotoUploadViewModel();
+            viewbicycle.Bicycle = new Bicycle();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var bicycle = await _context.Bicycle.FindAsync(id);
+
+            viewbicycle.Bicycle = bicycle;
+
             if (bicycle == null)
             {
                 return NotFound();
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycle.CyclistId);
-            return View(bicycle);
+            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            return View(viewbicycle);
         }
 
         // POST: Bicycles/Edit/5
@@ -106,9 +112,9 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BicycleId,VIN,Make,Model,Color,ManufactureYear,CyclistId")] Bicycle bicycle)
+        public async Task<IActionResult> Edit(int id, BicyclePhotoUploadViewModel viewbicycle)
         {
-            if (id != bicycle.BicycleId)
+            if (id != viewbicycle.Bicycle.BicycleId)
             {
                 return NotFound();
             }
@@ -117,12 +123,12 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    _context.Update(bicycle);
+                    _context.Update(viewbicycle.Bicycle);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BicycleExists(bicycle.BicycleId))
+                    if (!BicycleExists(viewbicycle.Bicycle.BicycleId))
                     {
                         return NotFound();
                     }
@@ -133,8 +139,8 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycle.CyclistId);
-            return View(bicycle);
+            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            return View(viewbicycle);
         }
 
         // GET: Bicycles/Delete/5
