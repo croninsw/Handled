@@ -87,18 +87,24 @@ namespace Handled.Controllers
         // GET: Cars/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            CarPhotoUploadViewModel viewcar = new CarPhotoUploadViewModel();
+            viewcar.Car = new Car();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var car = await _context.Car.FindAsync(id);
+
+            viewcar.Car = car;
+
             if (car == null)
             {
                 return NotFound();
             }
-            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "FirstName", car.DriverId);
-            return View(car);
+            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "FirstName", viewcar.Car.DriverId);
+            return View(viewcar);
         }
 
         // POST: Cars/Edit/5
@@ -106,9 +112,9 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarId,VIN,Make,Model,Color,ManufactureYear,DriverId")] Car car)
+        public async Task<IActionResult> Edit(int id, CarPhotoUploadViewModel viewcar)
         {
-            if (id != car.CarId)
+            if (id != viewcar.Car.CarId)
             {
                 return NotFound();
             }
@@ -117,12 +123,12 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(viewcar.Car);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CarExists(car.CarId))
+                    if (!CarExists(viewcar.Car.CarId))
                     {
                         return NotFound();
                     }
@@ -133,13 +139,16 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "FirstName", car.DriverId);
-            return View(car);
+            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "FirstName", viewcar.Car.DriverId);
+            return View(viewcar);
         }
 
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            CarPhotoUploadViewModel viewcar = new CarPhotoUploadViewModel();
+
+            viewcar.Car = new Car();
             if (id == null)
             {
                 return NotFound();
@@ -148,20 +157,34 @@ namespace Handled.Controllers
             var car = await _context.Car
                 .Include(c => c.Driver)
                 .FirstOrDefaultAsync(m => m.CarId == id);
+
+            viewcar.Car = car;
             if (car == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(viewcar);
         }
 
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, CarPhotoUploadViewModel viewcar)
         {
+
             var car = await _context.Car.FindAsync(id);
+            var cardriver = await _context.CarDriver.Where(cd => cd.CarId == id).FirstOrDefaultAsync();
+            var incident = await _context.Incident.Where(i => i.CarDriverId == cardriver.DriverId).FirstOrDefaultAsync();
+            viewcar.Car = car;
+            if (incident != null)
+            {
+                _context.Incident.Remove(incident);
+            }
+            if (cardriver != null)
+            {
+                _context.CarDriver.Remove(cardriver);
+            }
             _context.Car.Remove(car);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

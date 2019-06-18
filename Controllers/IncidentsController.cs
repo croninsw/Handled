@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Handled.Models.ViewModels;
+using System.IO;
 
 namespace Handled.Controllers
 {
@@ -22,7 +24,12 @@ namespace Handled.Controllers
         // GET: Incidents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Incident.Include(i => i.BicycleRider).Include(i => i.CarDriver);
+
+            // I want to connect the id of the cardriver.driverId to a driver.driverId
+            var applicationDbContext = _context.Incident
+                .Include(i => i.BicycleRider.Bicycle)
+                .Include(i => i.CarDriver.Driver);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,8 +42,10 @@ namespace Handled.Controllers
             }
 
             var incident = await _context.Incident
-                .Include(i => i.BicycleRider)
-                .Include(i => i.CarDriver)
+                .Include(i => i.BicycleRider.Bicycle)
+                .Include(i => i.BicycleRider.Cyclist)
+                .Include(i => i.CarDriver.Car)
+                .Include(i => i.CarDriver.Driver)
                 .FirstOrDefaultAsync(m => m.IncidentId == id);
             if (incident == null)
             {
@@ -49,9 +58,10 @@ namespace Handled.Controllers
         // GET: Incidents/Create
         public IActionResult Create()
         {
+            IncidentPhotoUploadViewModel viewincident = new IncidentPhotoUploadViewModel();
             ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId");
             ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId");
-            return View();
+            return View(viewincident);
         }
 
         // POST: Incidents/Create
@@ -59,17 +69,29 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IncidentId,BicycleRiderId,CarDriverId,IncidentDate")] Incident incident)
+        public async Task<IActionResult> Create(IncidentPhotoUploadViewModel viewincident)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(incident);
+                if (viewincident.ImageFile != null)
+                {
+                    var fileName = Path.GetFileName(viewincident.ImageFile.FileName);
+                    Path.GetTempFileName();
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewincident.ImageFile.CopyToAsync(stream);
+                    }
+
+                    viewincident.Incident.ImagePath = viewincident.ImageFile.FileName;
+                }
+                _context.Add(viewincident.Incident);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", incident.BicycleRiderId);
-            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", incident.CarDriverId);
-            return View(incident);
+            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", viewincident.Incident.BicycleRiderId);
+            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", viewincident.Incident.CarDriverId);
+            return View(viewincident);
         }
 
         // GET: Incidents/Edit/5
@@ -95,9 +117,9 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IncidentId,BicycleRiderId,CarDriverId,IncidentDate")] Incident incident)
+        public async Task<IActionResult> Edit(int id, IncidentPhotoUploadViewModel viewincident)
         {
-            if (id != incident.IncidentId)
+            if (id != viewincident.Incident.IncidentId)
             {
                 return NotFound();
             }
@@ -106,12 +128,12 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    _context.Update(incident);
+                    _context.Update(viewincident.Incident);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IncidentExists(incident.IncidentId))
+                    if (!IncidentExists(viewincident.Incident.IncidentId))
                     {
                         return NotFound();
                     }
@@ -122,9 +144,9 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", incident.BicycleRiderId);
-            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", incident.CarDriverId);
-            return View(incident);
+            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", viewincident.Incident.BicycleRiderId);
+            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", viewincident.Incident.CarDriverId);
+            return View(viewincident);
         }
 
         // GET: Incidents/Delete/5

@@ -18,7 +18,7 @@ namespace Handled.Models
         public string LicenseNumber { get; set; }
         public string InsuranceCompany { get; set; }
         public string InsurancePolicyNumber { get; set; }
-        public Car Car { get; set; }
+        public virtual ICollection<Car> Cars { get; set; }
         public virtual ICollection<CarDriver> CarDrivers { get; set; }
 
         public string FullName()

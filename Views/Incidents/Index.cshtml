@@ -40,7 +40,7 @@
             @Html.DisplayFor(modelItem => item.BicycleRider.BicycleRiderId)
         </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.CarDriver.Driver.DriverId)
+                @Html.DisplayFor(modelItem => item.CarDriver.Driver.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CarDriver.Driver.LastName)
@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.IncidentDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IncidentId">Edit</a> |
+
                 <a asp-action="Details" asp-route-id="@item.IncidentId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.IncidentId">Delete</a>
             </td>
