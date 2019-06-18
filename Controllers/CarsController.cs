@@ -177,8 +177,14 @@ namespace Handled.Controllers
             var cardriver = await _context.CarDriver.Where(cd => cd.CarId == id).FirstOrDefaultAsync();
             var incident = await _context.Incident.Where(i => i.CarDriverId == cardriver.DriverId).FirstOrDefaultAsync();
             viewcar.Car = car;
-            _context.Incident.Remove(incident);
-            _context.CarDriver.Remove(cardriver);
+            if (incident != null)
+            {
+                _context.Incident.Remove(incident);
+            }
+            if (cardriver != null)
+            {
+                _context.CarDriver.Remove(cardriver);
+            }
             _context.Car.Remove(car);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

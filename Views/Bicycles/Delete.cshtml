@@ -1,4 +1,4 @@
-﻿@model Handled.Models.Bicycle
+﻿@model Handled.Models.ViewModels.BicyclePhotoUploadViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,45 +12,45 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VIN)
+            @Html.DisplayNameFor(model => model.Bicycle.VIN)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VIN)
+            @Html.DisplayFor(model => model.Bicycle.VIN)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Make)
+            @Html.DisplayNameFor(model => model.Bicycle.Make)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Make)
+            @Html.DisplayFor(model => model.Bicycle.Make)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Model)
+            @Html.DisplayNameFor(model => model.Bicycle.Model)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Model)
+            @Html.DisplayFor(model => model.Bicycle.Model)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
+            @Html.DisplayNameFor(model => model.Bicycle.Color)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
+            @Html.DisplayFor(model => model.Bicycle.Color)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ManufactureYear)
+            @Html.DisplayNameFor(model => model.Bicycle.ManufactureYear)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ManufactureYear)
+            @Html.DisplayFor(model => model.Bicycle.ManufactureYear)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cyclist)
+            @Html.DisplayNameFor(model => model.Bicycle.Cyclist)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cyclist.Email)
+            @Html.DisplayFor(model => model.Bicycle.Cyclist.Email)
         </dd class>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="BicycleId" />
+        <input type="hidden" asp-for="Bicycle.BicycleId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
