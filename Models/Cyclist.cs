@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace Handled.Models
 {
-    public class Cyclist
+    public class Cyclist : IdentityUser
     {
-        [Key]
-        public int CyclistId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
         public string ImagePath { get; set; }
         public int Age { get; set; }
         public double Weight { get; set; }

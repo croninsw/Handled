@@ -10,7 +10,7 @@ namespace Handled.Models
     {
         [Key]
         public int CyclistEmergencyContactId { get; set; }
-        public int CyclistId { get; set; }
+        public string CyclistId { get; set; }
         public Cyclist Cyclist { get; set; }
         public int EmergencyContactId { get; set; }
         public EmergencyContact EmergencyContact { get; set; }

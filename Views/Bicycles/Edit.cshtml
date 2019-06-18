@@ -43,9 +43,9 @@
                 <input asp-for="ImageFile" type="file" class="form-control" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="Bicycle.CyclistId" class="control-label"></label>
-                <select asp-for="Bicycle.CyclistId" class="form-control" asp-items="ViewBag.CyclistId"></select>
+                <input asp-for="Bicycle.CyclistId" class="form-control" asp-items="ViewBag.CyclistId">
                 <span asp-validation-for="Bicycle.CyclistId" class="text-danger"></span>
             </div>
             <div class="form-group">

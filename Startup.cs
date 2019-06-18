@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Handled.Models;
 
 namespace Handled
 {
@@ -38,7 +39,7 @@ namespace Handled
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<Cyclist>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -70,7 +71,7 @@ namespace Handled
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Incidents}/{action=Index}/{id?}");
             });
         }
     }

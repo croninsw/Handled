@@ -7,17 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class BicycleRidersController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public BicycleRidersController(ApplicationDbContext context)
+        public BicycleRidersController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: BicycleRiders
         public async Task<IActionResult> Index()
@@ -49,8 +54,8 @@ namespace Handled.Controllers
         // GET: BicycleRiders/Create
         public IActionResult Create()
         {
-            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "VIN");
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email");
+            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "Make");
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email");
             return View();
         }
 
@@ -63,12 +68,14 @@ namespace Handled.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();
+                bicycleRider.CyclistId = user.Id;
                 _context.Add(bicycleRider);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "VIN", bicycleRider.BicycleId);
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycleRider.CyclistId);
+            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "Make", bicycleRider.BicycleId);
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycleRider.CyclistId);
             return View(bicycleRider);
         }
 

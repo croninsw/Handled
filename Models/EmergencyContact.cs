@@ -20,7 +20,7 @@ namespace Handled.Models
         [Required]
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int CyclistId { get; set; }
+        public string CyclistId { get; set; }
         public virtual ICollection<CyclistEmergencyContact> CyclistEmergencyContacts { get; set; }
 
         public string FullName()

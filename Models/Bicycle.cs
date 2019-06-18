@@ -17,7 +17,7 @@ namespace Handled.Models
         public string Color { get; set; }
         public string ManufactureYear { get; set; }
         public string ImagePath { get; set; }
-        public int CyclistId { get; set; }
+        public string CyclistId { get; set; }
         public Cyclist Cyclist { get; set; }
         public virtual ICollection<BicycleRider> BicycleRiders { get; set; }
     }

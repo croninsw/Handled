@@ -11,60 +11,69 @@
 </p>
 <table class="table">
     @*<thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VIN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Make)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ManufactureYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cyclist)
-            </th>
-            <th></th>
-        </tr>
-    </thead>*@
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VIN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Make)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Model)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Color)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ManufactureYear)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cyclist)
+                </th>
+                <th></th>
+            </tr>
+        </thead>*@
     <tbody>
         @foreach (var item in Model)
         {
             @*<tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VIN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Make)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Model)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Color)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ManufactureYear)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cyclist.Email)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.BicycleId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.BicycleId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.BicycleId">Delete</a>
-                </td>
-            </tr>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VIN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Make)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Color)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManufactureYear)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cyclist.Email)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.BicycleId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.BicycleId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.BicycleId">Delete</a>
+                    </td>
+                </tr>*@
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="~/images/@item.ImagePath" alt="Card image cap">
                 <div class="card-body">
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text">
+                        @Html.DisplayFor(modelItem => item.ManufactureYear)
+                        @Html.DisplayFor(modelItem => item.Make)
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </p>
+                    <p class="card-text">
+                        <a asp-action="Edit" asp-route-id="@item.BicycleId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.BicycleId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.BicycleId">Delete</a>
+                    </p>
                 </div>
             </div>
         }

@@ -40,23 +40,9 @@ namespace Handled.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cyclist",
-                columns: table => new
-                {
-                    CyclistId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
                     ImagePath = table.Column<string>(nullable: true),
                     Age = table.Column<int>(nullable: false),
                     Weight = table.Column<double>(nullable: false),
@@ -64,7 +50,7 @@ namespace Handled.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cyclist", x => x.CyclistId);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,16 +188,17 @@ namespace Handled.Migrations
                     Color = table.Column<string>(nullable: true),
                     ManufactureYear = table.Column<string>(nullable: true),
                     ImagePath = table.Column<string>(nullable: true),
-                    CyclistId = table.Column<int>(nullable: false)
+                    CyclistId = table.Column<int>(nullable: false),
+                    CyclistId1 = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bicycle", x => x.BicycleId);
                     table.ForeignKey(
-                        name: "FK_Bicycle_Cyclist_CyclistId",
-                        column: x => x.CyclistId,
-                        principalTable: "Cyclist",
-                        principalColumn: "CyclistId",
+                        name: "FK_Bicycle_AspNetUsers_CyclistId1",
+                        column: x => x.CyclistId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -226,16 +213,17 @@ namespace Handled.Migrations
                     Relation = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    CyclistId = table.Column<int>(nullable: false)
+                    CyclistId = table.Column<int>(nullable: false),
+                    CyclistId1 = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmergencyContact", x => x.EmergencyContactId);
                     table.ForeignKey(
-                        name: "FK_EmergencyContact_Cyclist_CyclistId",
-                        column: x => x.CyclistId,
-                        principalTable: "Cyclist",
-                        principalColumn: "CyclistId",
+                        name: "FK_EmergencyContact_AspNetUsers_CyclistId1",
+                        column: x => x.CyclistId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -272,6 +260,7 @@ namespace Handled.Migrations
                     BicycleRiderId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CyclistId = table.Column<int>(nullable: false),
+                    CyclistId1 = table.Column<string>(nullable: true),
                     BicycleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -284,10 +273,10 @@ namespace Handled.Migrations
                         principalColumn: "BicycleId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BicycleRider_Cyclist_CyclistId",
-                        column: x => x.CyclistId,
-                        principalTable: "Cyclist",
-                        principalColumn: "CyclistId",
+                        name: "FK_BicycleRider_AspNetUsers_CyclistId1",
+                        column: x => x.CyclistId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -298,16 +287,17 @@ namespace Handled.Migrations
                     CyclistEmergencyContactId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CyclistId = table.Column<int>(nullable: false),
+                    CyclistId1 = table.Column<string>(nullable: true),
                     EmergencyContactId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CyclistEmergencyContact", x => x.CyclistEmergencyContactId);
                     table.ForeignKey(
-                        name: "FK_CyclistEmergencyContact_Cyclist_CyclistId",
-                        column: x => x.CyclistId,
-                        principalTable: "Cyclist",
-                        principalColumn: "CyclistId",
+                        name: "FK_CyclistEmergencyContact_AspNetUsers_CyclistId1",
+                        column: x => x.CyclistId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CyclistEmergencyContact_EmergencyContact_EmergencyContactId",
@@ -411,9 +401,9 @@ namespace Handled.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bicycle_CyclistId",
+                name: "IX_Bicycle_CyclistId1",
                 table: "Bicycle",
-                column: "CyclistId");
+                column: "CyclistId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BicycleRider_BicycleId",
@@ -421,9 +411,9 @@ namespace Handled.Migrations
                 column: "BicycleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BicycleRider_CyclistId",
+                name: "IX_BicycleRider_CyclistId1",
                 table: "BicycleRider",
-                column: "CyclistId");
+                column: "CyclistId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Car_DriverId",
@@ -441,9 +431,9 @@ namespace Handled.Migrations
                 column: "DriverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CyclistEmergencyContact_CyclistId",
+                name: "IX_CyclistEmergencyContact_CyclistId1",
                 table: "CyclistEmergencyContact",
-                column: "CyclistId");
+                column: "CyclistId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CyclistEmergencyContact_EmergencyContactId",
@@ -451,9 +441,9 @@ namespace Handled.Migrations
                 column: "EmergencyContactId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmergencyContact_CyclistId",
+                name: "IX_EmergencyContact_CyclistId1",
                 table: "EmergencyContact",
-                column: "CyclistId");
+                column: "CyclistId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Incident_BicycleRiderId",
@@ -493,9 +483,6 @@ namespace Handled.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "EmergencyContact");
 
             migrationBuilder.DropTable(
@@ -511,7 +498,7 @@ namespace Handled.Migrations
                 name: "Car");
 
             migrationBuilder.DropTable(
-                name: "Cyclist");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Driver");

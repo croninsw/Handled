@@ -22,9 +22,6 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Age)
             </th>
             <th>
@@ -49,9 +46,6 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
@@ -61,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.Height)
             </td>
             <td>
-                <a asp-controller="BicycleRiders" asp-action="Create" asp-route-id="@item.CyclistId">Add Current Bicycle</a> |
-                <a asp-action="Details" asp-route-id="@item.CyclistId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CyclistId">Delete</a>
+                <a asp-controller="BicycleRiders" asp-action="Create" asp-route-id="@item.Id">Add Current Bicycle</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

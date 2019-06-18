@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190618163324_initial")]
+    [Migration("20190618193000_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,8 @@ namespace Handled.Migrations
 
                     b.Property<int>("CyclistId");
 
+                    b.Property<string>("CyclistId1");
+
                     b.Property<string>("ImagePath");
 
                     b.Property<string>("Make");
@@ -44,7 +46,7 @@ namespace Handled.Migrations
 
                     b.HasKey("BicycleId");
 
-                    b.HasIndex("CyclistId");
+                    b.HasIndex("CyclistId1");
 
                     b.ToTable("Bicycle");
                 });
@@ -59,11 +61,13 @@ namespace Handled.Migrations
 
                     b.Property<int>("CyclistId");
 
+                    b.Property<string>("CyclistId1");
+
                     b.HasKey("BicycleRiderId");
 
                     b.HasIndex("BicycleId");
 
-                    b.HasIndex("CyclistId");
+                    b.HasIndex("CyclistId1");
 
                     b.ToTable("BicycleRider");
                 });
@@ -119,14 +123,20 @@ namespace Handled.Migrations
 
             modelBuilder.Entity("Handled.Models.Cyclist", b =>
                 {
-                    b.Property<int>("CyclistId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
 
                     b.Property<int>("Age");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName")
                         .IsRequired();
@@ -138,14 +148,42 @@ namespace Handled.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
 
                     b.Property<double>("Weight");
 
-                    b.HasKey("CyclistId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Cyclist");
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Handled.Models.CyclistEmergencyContact", b =>
@@ -156,11 +194,13 @@ namespace Handled.Migrations
 
                     b.Property<int>("CyclistId");
 
+                    b.Property<string>("CyclistId1");
+
                     b.Property<int>("EmergencyContactId");
 
                     b.HasKey("CyclistEmergencyContactId");
 
-                    b.HasIndex("CyclistId");
+                    b.HasIndex("CyclistId1");
 
                     b.HasIndex("EmergencyContactId");
 
@@ -199,6 +239,8 @@ namespace Handled.Migrations
 
                     b.Property<int>("CyclistId");
 
+                    b.Property<string>("CyclistId1");
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FirstName")
@@ -215,7 +257,7 @@ namespace Handled.Migrations
 
                     b.HasKey("EmergencyContactId");
 
-                    b.HasIndex("CyclistId");
+                    b.HasIndex("CyclistId1");
 
                     b.ToTable("EmergencyContact");
                 });
@@ -285,57 +327,6 @@ namespace Handled.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -412,8 +403,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("Bicycles")
-                        .HasForeignKey("CyclistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CyclistId1");
                 });
 
             modelBuilder.Entity("Handled.Models.BicycleRider", b =>
@@ -425,8 +415,7 @@ namespace Handled.Migrations
 
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("BicycleRiders")
-                        .HasForeignKey("CyclistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CyclistId1");
                 });
 
             modelBuilder.Entity("Handled.Models.Car", b =>
@@ -454,8 +443,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("CyclistEmergencyContacts")
-                        .HasForeignKey("CyclistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CyclistId1");
 
                     b.HasOne("Handled.Models.EmergencyContact", "EmergencyContact")
                         .WithMany("CyclistEmergencyContacts")
@@ -467,8 +455,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist")
                         .WithMany("EmergencyContacts")
-                        .HasForeignKey("CyclistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CyclistId1");
                 });
 
             modelBuilder.Entity("Handled.Models.Incident", b =>
@@ -494,7 +481,7 @@ namespace Handled.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Handled.Models.Cyclist")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -502,7 +489,7 @@ namespace Handled.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Handled.Models.Cyclist")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -515,7 +502,7 @@ namespace Handled.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Handled.Models.Cyclist")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -523,7 +510,7 @@ namespace Handled.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Handled.Models.Cyclist")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -9,17 +9,22 @@ using Handled.Data;
 using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class BicyclesController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public BicyclesController(ApplicationDbContext context)
+        public BicyclesController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Bicycles
         public async Task<IActionResult> Index()
@@ -62,6 +67,8 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BicyclePhotoUploadViewModel viewbicycle)
         {
+           var user = await GetCurrentUserAsync();
+            viewbicycle.Bicycle.CyclistId = user.Id;
             if (ModelState.IsValid)
             {
                 if (viewbicycle.ImageFile != null)
@@ -80,7 +87,7 @@ namespace Handled.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.Cyclist.Id);
             return View(viewbicycle);
         }
 
@@ -103,7 +110,7 @@ namespace Handled.Controllers
             {
                 return NotFound();
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.Cyclist.Id);
             return View(viewbicycle);
         }
 
@@ -123,6 +130,18 @@ namespace Handled.Controllers
             {
                 try
                 {
+                    if (viewbicycle.ImageFile != null)
+                    {
+                        var fileName = Path.GetFileName(viewbicycle.ImageFile.FileName);
+                        Path.GetTempFileName();
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await viewbicycle.ImageFile.CopyToAsync(stream);
+                        }
+
+                        viewbicycle.Bicycle.ImagePath = viewbicycle.ImageFile.FileName;
+                    }
                     _context.Update(viewbicycle.Bicycle);
                     await _context.SaveChangesAsync();
                 }
@@ -139,7 +158,7 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.CyclistId);
+            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.Cyclist.Id);
             return View(viewbicycle);
         }
 
@@ -175,15 +194,18 @@ namespace Handled.Controllers
         {
 
             var bicycle = await _context.Bicycle.FindAsync(id);
-            var bicyclerider = await _context.BicycleRider.Where(br => br.BicycleId == id).FirstOrDefaultAsync();
-            var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleId).FirstOrDefaultAsync();
+            var bicyclerider = await _context.BicycleRider.Where(br => br.BicycleId == id).SingleOrDefaultAsync();
             viewbicycle.Bicycle = bicycle;
-            if (incident != null)
-            {
-                _context.Incident.Remove(incident);
-            }
+
             if (bicyclerider != null)
             {
+                var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
+
+                if (incident != null)
+                {
+                    _context.Incident.Remove(incident);
+                }
+
                 _context.BicycleRider.Remove(bicyclerider);
             }
             _context.Bicycle.Remove(bicycle);

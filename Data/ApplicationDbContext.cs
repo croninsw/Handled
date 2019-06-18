@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Handled.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<Cyclist>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

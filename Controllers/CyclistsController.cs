@@ -9,16 +9,19 @@ using Handled.Data;
 using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class CyclistsController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CyclistsController(ApplicationDbContext context)
+        public CyclistsController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Cyclists
@@ -28,7 +31,7 @@ namespace Handled.Controllers
         }
 
         // GET: Cyclists/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -36,7 +39,7 @@ namespace Handled.Controllers
             }
 
             var cyclist = await _context.Cyclist
-                .FirstOrDefaultAsync(m => m.CyclistId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (cyclist == null)
             {
                 return NotFound();
@@ -81,7 +84,7 @@ namespace Handled.Controllers
         }
 
         // GET: Cyclists/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             CyclistPhotoUploadViewModel viewcyclist = new CyclistPhotoUploadViewModel();
             viewcyclist.Cyclist = new Cyclist();
@@ -107,9 +110,9 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CyclistPhotoUploadViewModel viewcyclist)
+        public async Task<IActionResult> Edit(string id, CyclistPhotoUploadViewModel viewcyclist)
         {
-            if (id != viewcyclist.Cyclist.CyclistId)
+            if (id != viewcyclist.Cyclist.Id)
             {
                 return NotFound();
             }
@@ -118,12 +121,12 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    _context.Update(viewcyclist.Cyclist);
-                    await _context.SaveChangesAsync();
+                    await _userManager.UpdateAsync(viewcyclist.Cyclist);
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CyclistExists(viewcyclist.Cyclist.CyclistId))
+                    if (!CyclistExists(viewcyclist.Cyclist.Id))
                     {
                         return NotFound();
                     }
@@ -138,7 +141,7 @@ namespace Handled.Controllers
         }
 
         // GET: Cyclists/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -146,7 +149,7 @@ namespace Handled.Controllers
             }
 
             var cyclist = await _context.Cyclist
-                .FirstOrDefaultAsync(m => m.CyclistId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (cyclist == null)
             {
                 return NotFound();
@@ -158,7 +161,7 @@ namespace Handled.Controllers
         // POST: Cyclists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var cyclist = await _context.Cyclist.FindAsync(id);
             _context.Cyclist.Remove(cyclist);
@@ -166,9 +169,9 @@ namespace Handled.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CyclistExists(int id)
+        private bool CyclistExists(string id)
         {
-            return _context.Cyclist.Any(e => e.CyclistId == id);
+            return _context.Cyclist.Any(e => e.Id == id);
         }
     }
 }
