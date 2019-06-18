@@ -22,8 +22,9 @@ namespace Handled.Models
         public int Age { get; set; }
         public double Weight { get; set; }
         public string Height { get; set; }
-        public Bicycle Bicycle { get; set; }
+        public virtual ICollection<Bicycle> Bicycles { get; set; }
         public virtual ICollection<BicycleRider> BicycleRiders { get; set; }
+        public virtual ICollection<EmergencyContact> EmergencyContacts { get; set; }
         public virtual ICollection<CyclistEmergencyContact> CyclistEmergencyContacts { get; set; }
 
         public string FullName()

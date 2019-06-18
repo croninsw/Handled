@@ -85,24 +85,6 @@ namespace Handled.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmergencyContact",
-                columns: table => new
-                {
-                    EmergencyContactId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    Relation = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
-                    CyclistId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmergencyContact", x => x.EmergencyContactId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -234,6 +216,30 @@ namespace Handled.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmergencyContact",
+                columns: table => new
+                {
+                    EmergencyContactId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Relation = table.Column<string>(nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    CyclistId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmergencyContact", x => x.EmergencyContactId);
+                    table.ForeignKey(
+                        name: "FK_EmergencyContact_Cyclist_CyclistId",
+                        column: x => x.CyclistId,
+                        principalTable: "Cyclist",
+                        principalColumn: "CyclistId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Car",
                 columns: table => new
                 {
@@ -260,32 +266,6 @@ namespace Handled.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CyclistEmergencyContact",
-                columns: table => new
-                {
-                    CyclistEmergencyContactId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CyclistId = table.Column<int>(nullable: false),
-                    EmergencyContactId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CyclistEmergencyContact", x => x.CyclistEmergencyContactId);
-                    table.ForeignKey(
-                        name: "FK_CyclistEmergencyContact_Cyclist_CyclistId",
-                        column: x => x.CyclistId,
-                        principalTable: "Cyclist",
-                        principalColumn: "CyclistId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CyclistEmergencyContact_EmergencyContact_EmergencyContactId",
-                        column: x => x.EmergencyContactId,
-                        principalTable: "EmergencyContact",
-                        principalColumn: "EmergencyContactId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BicycleRider",
                 columns: table => new
                 {
@@ -308,6 +288,32 @@ namespace Handled.Migrations
                         column: x => x.CyclistId,
                         principalTable: "Cyclist",
                         principalColumn: "CyclistId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CyclistEmergencyContact",
+                columns: table => new
+                {
+                    CyclistEmergencyContactId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CyclistId = table.Column<int>(nullable: false),
+                    EmergencyContactId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CyclistEmergencyContact", x => x.CyclistEmergencyContactId);
+                    table.ForeignKey(
+                        name: "FK_CyclistEmergencyContact_Cyclist_CyclistId",
+                        column: x => x.CyclistId,
+                        principalTable: "Cyclist",
+                        principalColumn: "CyclistId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CyclistEmergencyContact_EmergencyContact_EmergencyContactId",
+                        column: x => x.EmergencyContactId,
+                        principalTable: "EmergencyContact",
+                        principalColumn: "EmergencyContactId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -407,8 +413,7 @@ namespace Handled.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Bicycle_CyclistId",
                 table: "Bicycle",
-                column: "CyclistId",
-                unique: true);
+                column: "CyclistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BicycleRider_BicycleId",
@@ -423,8 +428,7 @@ namespace Handled.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Car_DriverId",
                 table: "Car",
-                column: "DriverId",
-                unique: true);
+                column: "DriverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarDriver_CarId",
@@ -445,6 +449,11 @@ namespace Handled.Migrations
                 name: "IX_CyclistEmergencyContact_EmergencyContactId",
                 table: "CyclistEmergencyContact",
                 column: "EmergencyContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmergencyContact_CyclistId",
+                table: "EmergencyContact",
+                column: "CyclistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Incident_BicycleRiderId",

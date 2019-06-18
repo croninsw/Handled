@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190617162840_initial")]
+    [Migration("20190618163324_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,8 +44,7 @@ namespace Handled.Migrations
 
                     b.HasKey("BicycleId");
 
-                    b.HasIndex("CyclistId")
-                        .IsUnique();
+                    b.HasIndex("CyclistId");
 
                     b.ToTable("Bicycle");
                 });
@@ -94,8 +93,7 @@ namespace Handled.Migrations
 
                     b.HasKey("CarId");
 
-                    b.HasIndex("DriverId")
-                        .IsUnique();
+                    b.HasIndex("DriverId");
 
                     b.ToTable("Car");
                 });
@@ -216,6 +214,8 @@ namespace Handled.Migrations
                         .IsRequired();
 
                     b.HasKey("EmergencyContactId");
+
+                    b.HasIndex("CyclistId");
 
                     b.ToTable("EmergencyContact");
                 });
@@ -411,8 +411,8 @@ namespace Handled.Migrations
             modelBuilder.Entity("Handled.Models.Bicycle", b =>
                 {
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
-                        .WithOne("Bicycle")
-                        .HasForeignKey("Handled.Models.Bicycle", "CyclistId")
+                        .WithMany("Bicycles")
+                        .HasForeignKey("CyclistId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -432,8 +432,8 @@ namespace Handled.Migrations
             modelBuilder.Entity("Handled.Models.Car", b =>
                 {
                     b.HasOne("Handled.Models.Driver", "Driver")
-                        .WithOne("Car")
-                        .HasForeignKey("Handled.Models.Car", "DriverId")
+                        .WithMany("Cars")
+                        .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -460,6 +460,14 @@ namespace Handled.Migrations
                     b.HasOne("Handled.Models.EmergencyContact", "EmergencyContact")
                         .WithMany("CyclistEmergencyContacts")
                         .HasForeignKey("EmergencyContactId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Handled.Models.EmergencyContact", b =>
+                {
+                    b.HasOne("Handled.Models.Cyclist")
+                        .WithMany("EmergencyContacts")
+                        .HasForeignKey("CyclistId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

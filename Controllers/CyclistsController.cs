@@ -83,17 +83,23 @@ namespace Handled.Controllers
         // GET: Cyclists/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            CyclistPhotoUploadViewModel viewcyclist = new CyclistPhotoUploadViewModel();
+            viewcyclist.Cyclist = new Cyclist();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var cyclist = await _context.Cyclist.FindAsync(id);
+
+            viewcyclist.Cyclist = cyclist;
+
             if (cyclist == null)
             {
                 return NotFound();
             }
-            return View(cyclist);
+            return View(viewcyclist);
         }
 
         // POST: Cyclists/Edit/5
@@ -101,9 +107,9 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CyclistId,FirstName,LastName,Email,Password,Age,Weight,Height")] Cyclist cyclist)
+        public async Task<IActionResult> Edit(int id, CyclistPhotoUploadViewModel viewcyclist)
         {
-            if (id != cyclist.CyclistId)
+            if (id != viewcyclist.Cyclist.CyclistId)
             {
                 return NotFound();
             }
@@ -112,12 +118,12 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    _context.Update(cyclist);
+                    _context.Update(viewcyclist.Cyclist);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CyclistExists(cyclist.CyclistId))
+                    if (!CyclistExists(viewcyclist.Cyclist.CyclistId))
                     {
                         return NotFound();
                     }
@@ -128,7 +134,7 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cyclist);
+            return View(viewcyclist);
         }
 
         // GET: Cyclists/Delete/5
