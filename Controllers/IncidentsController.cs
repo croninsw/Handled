@@ -97,19 +97,23 @@ namespace Handled.Controllers
         // GET: Incidents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            IncidentPhotoUploadViewModel viewincident = new IncidentPhotoUploadViewModel();
+            viewincident.Incident = new Incident();
             if (id == null)
             {
                 return NotFound();
             }
 
             var incident = await _context.Incident.FindAsync(id);
+            viewincident.Incident = incident;
+
             if (incident == null)
             {
                 return NotFound();
             }
             ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", incident.BicycleRiderId);
             ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", incident.CarDriverId);
-            return View(incident);
+            return View(viewincident);
         }
 
         // POST: Incidents/Edit/5
@@ -126,6 +130,18 @@ namespace Handled.Controllers
 
             if (ModelState.IsValid)
             {
+                if (viewincident.ImageFile != null)
+                {
+                    var fileName = Path.GetFileName(viewincident.ImageFile.FileName);
+                    Path.GetTempFileName();
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewincident.ImageFile.CopyToAsync(stream);
+                    }
+
+                    viewincident.Incident.ImagePath = viewincident.ImageFile.FileName;
+                }
                 try
                 {
                     _context.Update(viewincident.Incident);
