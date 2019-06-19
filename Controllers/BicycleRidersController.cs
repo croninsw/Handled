@@ -68,11 +68,12 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BicycleRiderId,CyclistId,BicycleId")] BicycleRider bicycleRider)
+        public async Task<IActionResult> Create(BicycleRider bicycleRider)
         {
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
+                bicycleRider.UserId = user.Id;
                 bicycleRider.CyclistId = user.Id;
                 _context.Add(bicycleRider);
                 await _context.SaveChangesAsync();

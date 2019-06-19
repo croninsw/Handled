@@ -73,6 +73,7 @@ namespace Handled.Controllers
         {
            var user = await GetCurrentUserAsync();
             viewbicycle.Bicycle.CyclistId = user.Id;
+            viewbicycle.Bicycle.UserId = user.Id;
             if (ModelState.IsValid)
             {
                 if (viewbicycle.ImageFile != null)
@@ -125,44 +126,46 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, BicyclePhotoUploadViewModel viewbicycle)
         {
+            var user = await GetCurrentUserAsync();
             if (id != viewbicycle.Bicycle.BicycleId)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    if (viewbicycle.ImageFile != null)
+                    try
                     {
-                        var fileName = Path.GetFileName(viewbicycle.ImageFile.FileName);
-                        Path.GetTempFileName();
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        viewbicycle.Bicycle.UserId = user.Id;
+                        if (viewbicycle.ImageFile != null)
                         {
-                            await viewbicycle.ImageFile.CopyToAsync(stream);
-                        }
+                            var fileName = Path.GetFileName(viewbicycle.ImageFile.FileName);
+                            Path.GetTempFileName();
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await viewbicycle.ImageFile.CopyToAsync(stream);
+                            }
 
-                        viewbicycle.Bicycle.ImagePath = viewbicycle.ImageFile.FileName;
+                            viewbicycle.Bicycle.ImagePath = viewbicycle.ImageFile.FileName;
+                        }
+                        _context.Update(viewbicycle.Bicycle);
+                        await _context.SaveChangesAsync();
                     }
-                    _context.Update(viewbicycle.Bicycle);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BicycleExists(viewbicycle.Bicycle.BicycleId))
+                    catch (DbUpdateConcurrencyException)
                     {
-                        return NotFound();
+                        if (!BicycleExists(viewbicycle.Bicycle.BicycleId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", viewbicycle.Bicycle.Cyclist.Id);
+            
             return View(viewbicycle);
         }
 
@@ -196,7 +199,7 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, BicyclePhotoUploadViewModel viewbicycle)
         {
-
+            var user = await GetCurrentUserAsync();
             var bicycle = await _context.Bicycle.FindAsync(id);
             var bicyclerider = await _context.BicycleRider.Where(br => br.BicycleId == id).SingleOrDefaultAsync();
             viewbicycle.Bicycle = bicycle;
@@ -205,14 +208,19 @@ namespace Handled.Controllers
             {
                 var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
 
-                if (incident != null)
+                if (incident != null && incident.UserId == user.Id)
                 {
                     _context.Incident.Remove(incident);
                 }
-
-                _context.BicycleRider.Remove(bicyclerider);
+                if (bicyclerider.UserId == user.Id)
+                {
+                    _context.BicycleRider.Remove(bicyclerider);
+                }
             }
-            _context.Bicycle.Remove(bicycle);
+            if (bicycle.UserId == user.Id)
+            {
+                _context.Bicycle.Remove(bicycle);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

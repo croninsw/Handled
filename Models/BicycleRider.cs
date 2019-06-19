@@ -16,7 +16,6 @@ namespace Handled.Models
         public int BicycleId { get; set; }
         public Bicycle Bicycle { get; set; }
         public string UserId { get; set; }
-
         public virtual ICollection<Incident> Incidents { get; set; }
     }
 }

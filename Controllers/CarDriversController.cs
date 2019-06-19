@@ -7,17 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class CarDriversController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CarDriversController(ApplicationDbContext context)
+        public CarDriversController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: CarDrivers
         public async Task<IActionResult> Index()
@@ -152,6 +157,7 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
             var carDriver = await _context.CarDriver.FindAsync(id);
             _context.CarDriver.Remove(carDriver);
             await _context.SaveChangesAsync();
