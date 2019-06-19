@@ -196,7 +196,7 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, BicyclePhotoUploadViewModel viewbicycle)
         {
-
+            var user = await GetCurrentUserAsync();
             var bicycle = await _context.Bicycle.FindAsync(id);
             var bicyclerider = await _context.BicycleRider.Where(br => br.BicycleId == id).SingleOrDefaultAsync();
             viewbicycle.Bicycle = bicycle;
@@ -205,14 +205,19 @@ namespace Handled.Controllers
             {
                 var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
 
-                if (incident != null)
+                if (incident != null && incident.UserId == user.Id)
                 {
                     _context.Incident.Remove(incident);
                 }
-
-                _context.BicycleRider.Remove(bicyclerider);
+                if (bicyclerider.UserId == user.Id)
+                {
+                    _context.BicycleRider.Remove(bicyclerider);
+                }
             }
-            _context.Bicycle.Remove(bicycle);
+            if (bicycle.UserId == user.Id)
+            {
+                _context.Bicycle.Remove(bicycle);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
