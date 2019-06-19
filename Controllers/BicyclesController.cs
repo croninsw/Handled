@@ -10,6 +10,7 @@ using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Handled.Controllers
 {
@@ -27,10 +28,13 @@ namespace Handled.Controllers
         private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Bicycles
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Bicycle.Include(b => b.Cyclist);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await GetCurrentUserAsync();
+
+            var bicycles = _context.Bicycle.Where(b => b.CyclistId == user.Id);
+                return View( await bicycles.ToListAsync());
         }
 
         // GET: Bicycles/Details/5

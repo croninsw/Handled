@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Handled.Controllers
 {
@@ -42,7 +43,7 @@ namespace Handled.Controllers
 
             return View(driver);
         }
-
+        [Authorize]
         // GET: Drivers/Create
         public IActionResult Create()
         {
@@ -52,6 +53,7 @@ namespace Handled.Controllers
         // POST: Drivers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DriverId,FirstName,LastName,LicenseNumber,InsuranceCompany,InsurancePolicyNumber")] Driver driver)

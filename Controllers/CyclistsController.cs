@@ -24,10 +24,14 @@ namespace Handled.Controllers
             _userManager = userManager;
         }
 
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         // GET: Cyclists
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cyclist.ToListAsync());
+            var user = await GetCurrentUserAsync();
+            var profiles = _context.Cyclist.Where(c => c.Id == user.Id);
+            return View(await profiles.ToListAsync());
         }
 
         // GET: Cyclists/Details/5

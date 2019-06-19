@@ -10,6 +10,7 @@ using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Handled.Controllers
 {
@@ -26,28 +27,20 @@ namespace Handled.Controllers
         }
         private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        [Authorize]
         // GET: Incidents
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
 
             var incidents = _context.Incident
-                //.Where(i => i.BicycleRider.CyclistId == user.Id)
+                .Where(i => i.BicycleRider.CyclistId == user.Id)
                 .Include(i => i.BicycleRider.Bicycle)
                 .Include(i => i.CarDriver.Driver);
 
             return View(await incidents.ToListAsync());
         }
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    var user = await GetCurrentUserAsync();
-
-        //    var contacts = _context.EmergencyContact
-        //        .Where(e => e.CyclistId == user.Id);
-        //    return View(await contacts.ToListAsync());
-        //}
-
+        [Authorize]
         // GET: Incidents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -69,7 +62,7 @@ namespace Handled.Controllers
 
             return View(incident);
         }
-
+        [Authorize]
         // GET: Incidents/Create
         public IActionResult Create()
         {
@@ -82,6 +75,7 @@ namespace Handled.Controllers
         // POST: Incidents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IncidentPhotoUploadViewModel viewincident)
@@ -108,7 +102,7 @@ namespace Handled.Controllers
             ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", viewincident.Incident.CarDriverId);
             return View(viewincident);
         }
-
+        [Authorize]
         // GET: Incidents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -130,7 +124,7 @@ namespace Handled.Controllers
             ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", incident.CarDriverId);
             return View(viewincident);
         }
-
+        [Authorize]
         // POST: Incidents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -179,7 +173,7 @@ namespace Handled.Controllers
             ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", viewincident.Incident.CarDriverId);
             return View(viewincident);
         }
-
+        [Authorize]
         // GET: Incidents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -199,7 +193,7 @@ namespace Handled.Controllers
 
             return View(incident);
         }
-
+        [Authorize]
         // POST: Incidents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
