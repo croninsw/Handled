@@ -9,29 +9,44 @@ using Handled.Data;
 using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class IncidentsController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public IncidentsController(ApplicationDbContext context)
+        public IncidentsController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Incidents
         public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
 
-            // I want to connect the id of the cardriver.driverId to a driver.driverId
-            var applicationDbContext = _context.Incident
+            var incidents = _context.Incident
+                //.Where(i => i.BicycleRider.CyclistId == user.Id)
                 .Include(i => i.BicycleRider.Bicycle)
                 .Include(i => i.CarDriver.Driver);
 
-            return View(await applicationDbContext.ToListAsync());
+            return View(await incidents.ToListAsync());
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var user = await GetCurrentUserAsync();
+
+        //    var contacts = _context.EmergencyContact
+        //        .Where(e => e.CyclistId == user.Id);
+        //    return View(await contacts.ToListAsync());
+        //}
 
         // GET: Incidents/Details/5
         public async Task<IActionResult> Details(int? id)
