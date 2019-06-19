@@ -21,5 +21,7 @@ namespace Handled.Models
         public string ImagePath { get; set; }
         [Display(Name = "Date of Incident")]
         public DateTime IncidentDate { get; set; }
+        public string UserId { get; set; }
+
     }
 }

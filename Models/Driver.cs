@@ -23,12 +23,17 @@ namespace Handled.Models
         public string InsuranceCompany { get; set; }
         [Display(Name = "Policy number")]
         public string InsurancePolicyNumber { get; set; }
+        public string UserId { get; set; }
         public virtual ICollection<Car> Cars { get; set; }
         public virtual ICollection<CarDriver> CarDrivers { get; set; }
 
-        public string FullName()
+        [Display(Name = "Full Name")]
+        public string FullName
         {
-            return FirstName + LastName;
+            get
+            {
+                return FirstName + " " + LastName;
+            }
         }
     }
 }

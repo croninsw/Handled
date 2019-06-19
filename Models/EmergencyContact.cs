@@ -24,11 +24,17 @@ namespace Handled.Models
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string CyclistId { get; set; }
+        public string UserId { get; set; }
+
         public virtual ICollection<CyclistEmergencyContact> CyclistEmergencyContacts { get; set; }
 
-        public string FullName()
+        [Display(Name = "Full Name")]
+        public string FullName
         {
-            return FirstName + LastName;
+            get
+            {
+                return FirstName + " " + LastName;
+            }
         }
     }
 }

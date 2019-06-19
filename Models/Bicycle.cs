@@ -25,6 +25,8 @@ namespace Handled.Models
         [Display(Name = "Cyclist")]
         public string CyclistId { get; set; }
         public Cyclist Cyclist { get; set; }
+        public string UserId { get; set; }
+
         public virtual ICollection<BicycleRider> BicycleRiders { get; set; }
     }
 }

@@ -9,18 +9,22 @@ using Handled.Data;
 using Handled.Models;
 using Handled.Models.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class CarsController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CarsController(ApplicationDbContext context)
+        public CarsController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Cars
         public async Task<IActionResult> Index()
         {
@@ -48,10 +52,13 @@ namespace Handled.Controllers
         }
 
         // GET: Cars/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await GetCurrentUserAsync();
+
             CarPhotoUploadViewModel viewcar = new CarPhotoUploadViewModel();
-            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName");
+            // Need to not show Driver's that have not been created by the specific users
+            ViewData["DriverId"] = new SelectList(_context.Driver.Where(d => d.UserId == user.Id), "DriverId", "LastName");
             return View(viewcar);
         }
 
@@ -80,7 +87,9 @@ namespace Handled.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "CarDrivers", new { area = "" });
             }
-            ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName", viewcar.Car.DriverId);
+
+                ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName", viewcar.Car.DriverId);
+
             return View(viewcar);
         }
 

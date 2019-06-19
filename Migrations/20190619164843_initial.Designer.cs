@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Handled.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190618193000_initial")]
+    [Migration("20190619164843_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,9 +29,7 @@ namespace Handled.Migrations
 
                     b.Property<string>("Color");
 
-                    b.Property<int>("CyclistId");
-
-                    b.Property<string>("CyclistId1");
+                    b.Property<string>("CyclistId");
 
                     b.Property<string>("ImagePath");
 
@@ -41,12 +39,14 @@ namespace Handled.Migrations
 
                     b.Property<string>("Model");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("VIN")
                         .IsRequired();
 
                     b.HasKey("BicycleId");
 
-                    b.HasIndex("CyclistId1");
+                    b.HasIndex("CyclistId");
 
                     b.ToTable("Bicycle");
                 });
@@ -59,15 +59,15 @@ namespace Handled.Migrations
 
                     b.Property<int>("BicycleId");
 
-                    b.Property<int>("CyclistId");
+                    b.Property<string>("CyclistId");
 
-                    b.Property<string>("CyclistId1");
+                    b.Property<string>("UserId");
 
                     b.HasKey("BicycleRiderId");
 
                     b.HasIndex("BicycleId");
 
-                    b.HasIndex("CyclistId1");
+                    b.HasIndex("CyclistId");
 
                     b.ToTable("BicycleRider");
                 });
@@ -93,6 +93,8 @@ namespace Handled.Migrations
 
                     b.Property<string>("Model");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("VIN");
 
                     b.HasKey("CarId");
@@ -111,6 +113,8 @@ namespace Handled.Migrations
                     b.Property<int>("CarId");
 
                     b.Property<int>("DriverId");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("CarDriverId");
 
@@ -168,6 +172,8 @@ namespace Handled.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
@@ -192,15 +198,13 @@ namespace Handled.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CyclistId");
-
-                    b.Property<string>("CyclistId1");
+                    b.Property<string>("CyclistId");
 
                     b.Property<int>("EmergencyContactId");
 
                     b.HasKey("CyclistEmergencyContactId");
 
-                    b.HasIndex("CyclistId1");
+                    b.HasIndex("CyclistId");
 
                     b.HasIndex("EmergencyContactId");
 
@@ -226,6 +230,8 @@ namespace Handled.Migrations
                     b.Property<string>("LicenseNumber")
                         .IsRequired();
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("DriverId");
 
                     b.ToTable("Driver");
@@ -237,9 +243,7 @@ namespace Handled.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CyclistId");
-
-                    b.Property<string>("CyclistId1");
+                    b.Property<string>("CyclistId");
 
                     b.Property<string>("Email");
 
@@ -255,9 +259,11 @@ namespace Handled.Migrations
                     b.Property<string>("Relation")
                         .IsRequired();
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("EmergencyContactId");
 
-                    b.HasIndex("CyclistId1");
+                    b.HasIndex("CyclistId");
 
                     b.ToTable("EmergencyContact");
                 });
@@ -275,6 +281,8 @@ namespace Handled.Migrations
                     b.Property<string>("ImagePath");
 
                     b.Property<DateTime>("IncidentDate");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("IncidentId");
 
@@ -403,7 +411,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("Bicycles")
-                        .HasForeignKey("CyclistId1");
+                        .HasForeignKey("CyclistId");
                 });
 
             modelBuilder.Entity("Handled.Models.BicycleRider", b =>
@@ -415,7 +423,7 @@ namespace Handled.Migrations
 
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("BicycleRiders")
-                        .HasForeignKey("CyclistId1");
+                        .HasForeignKey("CyclistId");
                 });
 
             modelBuilder.Entity("Handled.Models.Car", b =>
@@ -443,7 +451,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist", "Cyclist")
                         .WithMany("CyclistEmergencyContacts")
-                        .HasForeignKey("CyclistId1");
+                        .HasForeignKey("CyclistId");
 
                     b.HasOne("Handled.Models.EmergencyContact", "EmergencyContact")
                         .WithMany("CyclistEmergencyContacts")
@@ -455,7 +463,7 @@ namespace Handled.Migrations
                 {
                     b.HasOne("Handled.Models.Cyclist")
                         .WithMany("EmergencyContacts")
-                        .HasForeignKey("CyclistId1");
+                        .HasForeignKey("CyclistId");
                 });
 
             modelBuilder.Entity("Handled.Models.Incident", b =>

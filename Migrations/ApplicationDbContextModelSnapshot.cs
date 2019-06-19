@@ -37,6 +37,8 @@ namespace Handled.Migrations
 
                     b.Property<string>("Model");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("VIN")
                         .IsRequired();
 
@@ -56,6 +58,8 @@ namespace Handled.Migrations
                     b.Property<int>("BicycleId");
 
                     b.Property<string>("CyclistId");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("BicycleRiderId");
 
@@ -87,6 +91,8 @@ namespace Handled.Migrations
 
                     b.Property<string>("Model");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("VIN");
 
                     b.HasKey("CarId");
@@ -105,6 +111,8 @@ namespace Handled.Migrations
                     b.Property<int>("CarId");
 
                     b.Property<int>("DriverId");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("CarDriverId");
 
@@ -162,6 +170,8 @@ namespace Handled.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
+                    b.Property<string>("UserId");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
@@ -218,6 +228,8 @@ namespace Handled.Migrations
                     b.Property<string>("LicenseNumber")
                         .IsRequired();
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("DriverId");
 
                     b.ToTable("Driver");
@@ -245,6 +257,8 @@ namespace Handled.Migrations
                     b.Property<string>("Relation")
                         .IsRequired();
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("EmergencyContactId");
 
                     b.HasIndex("CyclistId");
@@ -265,6 +279,8 @@ namespace Handled.Migrations
                     b.Property<string>("ImagePath");
 
                     b.Property<DateTime>("IncidentDate");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("IncidentId");
 
