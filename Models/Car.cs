@@ -27,6 +27,8 @@ namespace Handled.Models
         [Display(Name = "Who is the driver?")]
         public int DriverId { get; set; }
         public Driver Driver { get; set; }
+        public string UserId { get; set; }
+
         public virtual ICollection<CarDriver> CarDrivers { get; set; }
     }
 }

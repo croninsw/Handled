@@ -8,18 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class DriversController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public DriversController(ApplicationDbContext context)
+        public DriversController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Drivers
         public async Task<IActionResult> Index()
         {
@@ -60,6 +64,8 @@ namespace Handled.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();
+                driver.UserId = user.Id;
                 _context.Add(driver);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "Cars", new { area = "" });

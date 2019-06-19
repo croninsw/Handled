@@ -163,20 +163,24 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
+
             var bicyclerider = await _context.BicycleRider.FindAsync(id);
 
             if (bicyclerider != null)
             {
                 var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
 
-                if (incident != null)
+                if (incident != null && incident.UserId == user.Id)
                 {
-                    _context.Incident.Remove(incident);
+                    _context.Incident
+                        .Remove(incident);
                 }
-
-                //_context.BicycleRider.Remove(bicyclerider);
             }
-            _context.BicycleRider.Remove(bicyclerider);
+            if (bicyclerider.UserId == user.Id)
+            {
+                _context.BicycleRider.Remove(bicyclerider);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
