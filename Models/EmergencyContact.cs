@@ -12,12 +12,15 @@ namespace Handled.Models
         [Key]
         public int EmergencyContactId { get; set; }
         [Required]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
         [Required]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
         [Required]
         public string Relation { get; set; }
         [Required]
+        [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string CyclistId { get; set; }

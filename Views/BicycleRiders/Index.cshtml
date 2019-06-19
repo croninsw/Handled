@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h2>I am currently riding these bicycles:</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add a new daily rider</a>
 </p>
 <table class="table">
     <thead>
@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.Cyclist)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bicycle)
+                @Html.DisplayNameFor(model => model.Bicycle.Make)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bicycle.Model)
             </th>
             <th></th>
         </tr>
@@ -25,13 +28,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Cyclist.Email)
+                @Html.DisplayFor(modelItem => item.Cyclist.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bicycle.VIN)
+                @Html.DisplayFor(modelItem => item.Bicycle.Make)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.BicycleRiderId">Edit</a> |
+                @Html.DisplayFor(modelItem => item.Bicycle.Model)
+            </td>
+            <td>
                 <a asp-action="Details" asp-route-id="@item.BicycleRiderId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.BicycleRiderId">Delete</a>
             </td>
