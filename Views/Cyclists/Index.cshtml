@@ -4,65 +4,157 @@
     ViewData["Title"] = "Index";
 }
 
-    <h2>
-        Profile
-    </h2>
+<h2>
+    Profile
+</h2>
 
 <p>
     <a asp-controller="Bicycles" asp-action="Create">New Bike Day!</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Height)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Weight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Height)
-            </td>
-            <td>
-                <a asp-controller="BicycleRiders" asp-action="Create" asp-route-id="@item.Id">What are you currently riding?</a>
-            </td>
-            <td>
-                <a asp-controller="Cyclists" asp-action="Edit" asp-route-id="@item.Id">Edit profile</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card-columns">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <img class="card-img img-thumbnail" src="~/images/person.jpg" alt="User's profile picture">
+        </div>
+        <div class="card p-3">
+            <blockquote class="blockquote mb-0 card-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        Someone famous in <cite title="Source Title">Source Title</cite>
+                    </small>
+                </footer>
+            </blockquote>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">@item.FullName</h1>
+
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+
+        <div class="card p-3 text-right">
+            <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        Someone famous in <cite title="Source Title">Source Title</cite>
+                    </small>
+                </footer>
+            </blockquote>
+        </div>
+        <div class="card bg-warning text-white text-center p-3">
+            <blockquote class="blockquote mb-0">
+                <p>Links to My Emergency Contacts</p>
+            </blockquote>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="" alt="User's profile picture">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-text">This space would allow for a user to input a quote or short bio about themselves.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+
+    }
+</div>
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Age)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Height)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Height)
+                </td>
+                <td>
+                    <a asp-controller="BicycleRiders" asp-action="Create" asp-route-id="@item.Id">What are you currently riding?</a>
+                </td>
+                <td>
+                    <a asp-controller="Cyclists" asp-action="Edit" asp-route-id="@item.Id">Edit profile</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
+
+
+@*<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Email)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Email)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Age)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Age)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Weight)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Weight)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Height)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Height)
+    </dd>
+</dl>*@
