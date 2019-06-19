@@ -43,7 +43,7 @@
                 <span asp-validation-for="Car.ManufactureYear" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Car.DriverId" class="control-label"></label>
+                <label asp-for="Car.DriverId" class="control-label" hidden></label>
                 <select asp-for="Car.DriverId" class="form-control" asp-items="ViewBag.DriverId"></select>
             </div>
             <div class="form-group">

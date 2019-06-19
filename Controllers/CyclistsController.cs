@@ -89,7 +89,8 @@ namespace Handled.Controllers
 
         // GET: Cyclists/Edit/5
         public async Task<IActionResult> Edit(string id)
-        {
+        {            
+
             CyclistPhotoUploadViewModel viewcyclist = new CyclistPhotoUploadViewModel();
             viewcyclist.Cyclist = new Cyclist();
 
