@@ -10,9 +10,12 @@ namespace Handled.Models
     public class Cyclist : IdentityUser
     {
         [Required]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
         [Required]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
+        [Display(Name = "Picture")]
         public string ImagePath { get; set; }
         public int Age { get; set; }
         public double Weight { get; set; }

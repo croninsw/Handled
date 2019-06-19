@@ -12,6 +12,7 @@ namespace Handled.Models
         public int BicycleRiderId { get; set; }
         public string CyclistId { get; set; }
         public Cyclist Cyclist { get; set; }
+        [Display(Name = "Which bike?")]
         public int BicycleId { get; set; }
         public Bicycle Bicycle { get; set; }
         public virtual ICollection<Incident> Incidents { get; set; }

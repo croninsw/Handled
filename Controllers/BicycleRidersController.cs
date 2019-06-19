@@ -27,7 +27,11 @@ namespace Handled.Controllers
         // GET: BicycleRiders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BicycleRider.Include(b => b.Bicycle).Include(b => b.Cyclist);
+            var user = await GetCurrentUserAsync();
+            var applicationDbContext = _context.BicycleRider
+                .Where(b => b.CyclistId == user.Id)
+                .Include(b => b.Bicycle)
+                .Include(b => b.Cyclist);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -129,8 +133,8 @@ namespace Handled.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "VIN", bicycleRider.BicycleId);
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycleRider.CyclistId);
+            ViewData["BicycleId"] = new SelectList(_context.Bicycle, "BicycleId", "Make", bicycleRider.BicycleId);
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email", bicycleRider.CyclistId);
             return View(bicycleRider);
         }
 
@@ -159,8 +163,20 @@ namespace Handled.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bicycleRider = await _context.BicycleRider.FindAsync(id);
-            _context.BicycleRider.Remove(bicycleRider);
+            var bicyclerider = await _context.BicycleRider.FindAsync(id);
+
+            if (bicyclerider != null)
+            {
+                var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
+
+                if (incident != null)
+                {
+                    _context.Incident.Remove(incident);
+                }
+
+                //_context.BicycleRider.Remove(bicyclerider);
+            }
+            _context.BicycleRider.Remove(bicyclerider);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

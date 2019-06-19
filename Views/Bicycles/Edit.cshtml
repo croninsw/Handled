@@ -4,9 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h2>Edit your bicycles specifications:</h2>
 
-<h4>Bicycle</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,7 +38,7 @@
                 <span asp-validation-for="Bicycle.ManufactureYear" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
+                <label>Photo for profile</label>
                 <input asp-for="ImageFile" type="file" class="form-control" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
