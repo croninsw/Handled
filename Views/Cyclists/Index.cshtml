@@ -59,6 +59,9 @@
             <td>
                 <a asp-controller="BicycleRiders" asp-action="Create" asp-route-id="@item.Id">What are you currently riding?</a>
             </td>
+            <td>
+                <a asp-controller="Cyclists" asp-action="Edit" asp-route-id="@item.Id">Edit profile</a>
+            </td>
         </tr>
 }
     </tbody>
