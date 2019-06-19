@@ -56,7 +56,7 @@ namespace Handled.Controllers
         public IActionResult Create()
         {
             BicyclePhotoUploadViewModel viewbicycle = new BicyclePhotoUploadViewModel();
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email");
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "Email");
             return View(viewbicycle);
         }
 

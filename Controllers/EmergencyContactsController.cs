@@ -7,22 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Handled.Data;
 using Handled.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Handled.Controllers
 {
     public class EmergencyContactsController : Controller
     {
+        private readonly UserManager<Cyclist> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public EmergencyContactsController(ApplicationDbContext context)
+        public EmergencyContactsController(ApplicationDbContext context, UserManager<Cyclist> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
+        private Task<Cyclist> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
 
         // GET: EmergencyContacts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.EmergencyContact.ToListAsync());
+            var user = await GetCurrentUserAsync();
+
+            var contacts = _context.EmergencyContact
+                .Where(e => e.CyclistId == user.Id);
+            return View(await contacts.ToListAsync());
         }
 
         // GET: EmergencyContacts/Details/5
@@ -46,7 +56,7 @@ namespace Handled.Controllers
         // GET: EmergencyContacts/Create
         public IActionResult Create()
         {
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "LastName");
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "LastName");
             return View();
         }
 
@@ -59,11 +69,13 @@ namespace Handled.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();
+                emergencyContact.CyclistId = user.Id;
                 _context.Add(emergencyContact);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "LastName", emergencyContact.CyclistId);
+            //ViewData["CyclistId"] = new SelectList(_context.Cyclist, "CyclistId", "LastName", emergencyContact.CyclistId);
             return View(emergencyContact);
         }
 
