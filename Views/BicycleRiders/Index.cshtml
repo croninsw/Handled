@@ -12,9 +12,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Cyclist)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Bicycle.Make)
             </th>
@@ -27,9 +27,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Cyclist.FirstName)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Bicycle.Make)
             </td>
@@ -37,7 +37,6 @@
                 @Html.DisplayFor(modelItem => item.Bicycle.Model)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.BicycleRiderId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.BicycleRiderId">Retire</a>
             </td>
         </tr>

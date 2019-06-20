@@ -54,7 +54,7 @@ namespace Handled.Controllers
         // GET: CarDrivers/Create
         public IActionResult Create()
         {
-            ViewData["CarId"] = new SelectList(_context.Car, "CarId", "VIN");
+            ViewData["CarId"] = new SelectList(_context.Car, "CarId", "LicensePlate");
             ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "LastName");
             return View();
         }
@@ -72,7 +72,7 @@ namespace Handled.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "Incidents", new { area = "" });
             }
-            ViewData["CarId"] = new SelectList(_context.Car, "CarId", "VIN", carDriver.CarId);
+            ViewData["CarId"] = new SelectList(_context.Car, "CarId", "LicensePlate", carDriver.CarId);
             ViewData["DriverId"] = new SelectList(_context.Driver, "DriverId", "FirstName", carDriver.DriverId);
             return View(carDriver);
         }
