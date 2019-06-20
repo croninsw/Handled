@@ -64,11 +64,12 @@ namespace Handled.Controllers
         }
         [Authorize]
         // GET: Incidents/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await GetCurrentUserAsync();
             IncidentPhotoUploadViewModel viewincident = new IncidentPhotoUploadViewModel();
-            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId");
-            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId");
+            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider.Where(b => b.UserId == user.Id).Include(b => b.Bicycle), "BicycleRiderId", "Bicycle.Make");
+            ViewData["CarDriverId"] = new SelectList(_context.CarDriver.Where(c => c.UserId == user.Id).Include(c => c.Car), "CarDriverId", "Car.Make");
             return View(viewincident);
         }
 
@@ -98,8 +99,8 @@ namespace Handled.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "BicycleRiderId", viewincident.Incident.BicycleRiderId);
-            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "CarDriverId", viewincident.Incident.CarDriverId);
+            ViewData["BicycleRiderId"] = new SelectList(_context.BicycleRider, "BicycleRiderId", "Bicycle.Make", viewincident.Incident.BicycleRiderId);
+            ViewData["CarDriverId"] = new SelectList(_context.CarDriver, "CarDriverId", "Car.Make", viewincident.Incident.CarDriverId);
             return View(viewincident);
         }
         [Authorize]
