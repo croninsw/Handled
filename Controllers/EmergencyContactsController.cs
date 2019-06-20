@@ -100,7 +100,7 @@ namespace Handled.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmergencyContactId,FirstName,LastName,Relation,PhoneNumber,Email,CyclistId")] EmergencyContact emergencyContact)
+        public async Task<IActionResult> Edit(int id, EmergencyContact emergencyContact)
         {
             if (id != emergencyContact.EmergencyContactId)
             {
@@ -111,6 +111,8 @@ namespace Handled.Controllers
             {
                 try
                 {
+                    var user = await GetCurrentUserAsync();
+                    emergencyContact.CyclistId = user.Id;
                     _context.Update(emergencyContact);
                     await _context.SaveChangesAsync();
                 }
