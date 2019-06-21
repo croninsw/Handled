@@ -22,3 +22,6 @@ The Web App is built with Entity Framework using MVC and ADO.NET. I spent a good
 
 ## As the final capstone in my time here at Nashville Software School,
 I want to say thank you to all of my peers in Cohort 30. Thank you to the instructors: Steve Brownlee, Meg Ducharme, Jenna Solis and all of our T.A.'s.
+
+## Link to my ERD
+https://dbdiagram.io/d/5d0c4c55a197dd29a2442c72
