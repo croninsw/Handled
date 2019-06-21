@@ -168,20 +168,23 @@ namespace Handled.Controllers
 
             var bicyclerider = await _context.BicycleRider.FindAsync(id);
 
-            if (bicyclerider != null)
-            {
-                var incident = await _context.Incident.Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId).SingleOrDefaultAsync();
+            //if (bicyclerider != null)
+            //{
+                var incident = await _context.Incident
+                    .Where(i => i.BicycleRiderId == bicyclerider.BicycleRiderId)
+                    .FirstOrDefaultAsync();
 
-                if (incident != null && incident.UserId == user.Id)
+                if (incident != null)
+                     //&& incident.UserId == user.Id
                 {
                     _context.Incident
                         .Remove(incident);
                 }
-            }
-            if (bicyclerider.UserId == user.Id)
-            {
+            //}
+            //if (bicyclerider.UserId == user.Id)
+            //{
                 _context.BicycleRider.Remove(bicyclerider);
-            }
+            //}
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

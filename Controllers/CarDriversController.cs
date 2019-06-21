@@ -68,6 +68,8 @@ namespace Handled.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();
+                carDriver.UserId = user.Id;
                 _context.Add(carDriver);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "Incidents", new { area = "" });

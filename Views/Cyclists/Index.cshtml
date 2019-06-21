@@ -15,40 +15,39 @@
     @foreach (var item in Model)
     {
         <div class="card">
-            <img class="card-img img-thumbnail" src="~/images/person.jpg" alt="User's profile picture">
+            <div class="card-body">
+                <h1 class="card-title">@item.FullName</h1>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img img-thumbnail" src="~/images/@item.ImagePath" alt="User's profile picture">
         </div>
         <div class="card p-3">
             <blockquote class="blockquote mb-0 card-body">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <p>This card would allow the cyclist to post status updates.</p>
+
                 <footer class="blockquote-footer">
                     <small class="text-muted">
                         Someone famous in <cite title="Source Title">Source Title</cite>
                     </small>
+                    <small class="text-muted">
+                        Last updated 5 minutes ago
+                    </small>
                 </footer>
             </blockquote>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h1 class="card-title">@item.FullName</h1>
 
-            </div>
-        </div>
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <h5 class="card-title">Personal Information</h5>
+                <p class="card-text">This card has quick reference points to information about the cyclist.</p>
             </div>
         </div>
 
         <div class="card p-3 text-right">
             <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">
-                    <small class="text-muted">
-                        Someone famous in <cite title="Source Title">Source Title</cite>
-                    </small>
-                </footer>
+                <p>Similarly, this card allows the cyclist to share quick tidbits of information: typical cycling routes, known allergies or previous injuries, etc.</p>
             </blockquote>
         </div>
         <div class="card bg-warning text-white text-center p-3">
@@ -57,19 +56,17 @@
             </blockquote>
         </div>
         <div class="card">
-            <img class="card-img-top" src="" alt="User's profile picture">
             <div class="card-body">
-                <h5 class="card-title"></h5>
-                <p class="card-text">This space would allow for a user to input a quote or short bio about themselves.</p>
+                <h5 class="card-title">Photos</h5>
+                <p class="card-text">This space would allow for users to show off images of their bicycles.</p>
             </div>
         </div>
 
         <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <h5 class="card-title">Photos</h5>
+                <p class="card-text">More space for users to post photos of their bicycles. This would help with laying claim to a bicycle and providing proof of ownership.</p>
+
             </div>
         </div>
 
