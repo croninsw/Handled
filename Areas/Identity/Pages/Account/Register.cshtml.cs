@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Handled.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -55,25 +57,51 @@ namespace Handled.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
             [Required]
+            [Display(Name = "First name")]
             public string FirstName { get; set; }
             [Required]
+            [Display(Name = "Last name")]
             public string LastName { get; set; }
+            [Required]
+       
+            public int Age { get; set; }
+            [Required]
+
+            public double Weight { get; set; }
+            [Required]
+            public string Height { get; set; }
+            [Display(Name = "Photo of yourself")]
+            public string ImagePath { get; set; }
+            public IFormFile ImageFile { get; set; }
 
         }
 
         public void OnGet(string returnUrl = null)
         {
+
             ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new Cyclist { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName  };
+                if (Input.ImageFile != null)
+                {
+                    var fileName = Path.GetFileName(Input.ImageFile.FileName);
+                    Path.GetTempFileName();
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.ImageFile.CopyToAsync(stream);
+                    }
+
+                    Input.ImagePath = Input.ImageFile.FileName;
+                }
+                var user = new Cyclist { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, Age = Input.Age, Weight = Input.Weight, Height = Input.Height, ImagePath = Input.ImageFile.FileName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

@@ -126,7 +126,7 @@ namespace Handled.Controllers
             {
                 try
                 {
-                    await _userManager.UpdateAsync(viewcyclist.Cyclist);
+                   await _userManager.UpdateAsync(viewcyclist.Cyclist);
                     
                 }
                 catch (DbUpdateConcurrencyException)

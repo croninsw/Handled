@@ -42,8 +42,10 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-image: url(~/images/katie-moum-446408-unsplash.jpg);
+    background-position: center;
 }
 .footer {
   position: absolute;
